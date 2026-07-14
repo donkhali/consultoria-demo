@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel de Control - Sincronizador de Agenda</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f1f5f9; padding: 40px; color: #0f172a; }
+        .card { background: white; padding: 40px; border-radius: 12px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
+        h2 { font-size: 1.4rem; font-weight: 800; margin-bottom: 10px; color: #1e293b; }
+        .btn { background: #2563eb; color: white; padding: 14px 24px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; font-size: 15px; }
+        .btn-logout { background: #ef4444; margin-top: 15px; font-size: 13px; padding: 10px; }
+        .status { margin: 20px 0; padding: 15px; border-radius: 8px; background: #f8fafc; border-left: 4px solid #cbd5e1; font-size: 14px; font-weight: 600; }
+        .active { border-left-color: #22c55e; background: #f0fdf4; color: #166534; }
+        #log-citas { margin-top: 25px; background: #0f172a; color: #38bdf8; padding: 20px; border-radius: 8px; font-family: monospace; font-size: 12px; max-height: 250px; overflow-y: auto; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2>Sincronizador Google Calendar</h2>
+        <p style="color: #64748b; font-size: 14px; margin-bottom: 20px;">Mantén este panel abierto en segundo plano en tu PC o teléfono móvil para automatizar la inyección de citas entrantes.</p>
+        
+        <div id="auth-section">
+            <button class="btn" id="btn-login">Vincular mi Cuenta de Google</button>
+        </div>
+
+        <div id="admin-section" style="display: none;">
+            <div id="status-box" class="status active">🟢 Conectado con Firestore. Escuchando citas en tiempo real...</div>
+            <div id="log-citas">🚀 Consola de sincronización inicializada...<br></div>
+            <button class="btn btn-logout" id="btn-logout">Desconectar e Inactivar Servidor</button>
+        </div>
+    </div>
+
+    <!-- LÓGICA MODULAR DE FIREBASE + GOOGLE OAUTH -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, query, where, onSnapshot, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // Configuración oficial provista por el usuario
+        const firebaseConfig = {
+            apiKey: "AIzaSyDgIdkDoxCNNF6l0rBXNcSt_EvxdyD5fQU",
+            authDomain: "agendacomercial-665e0.firebaseapp.com",
+            projectId: "agendacomercial-665e0",
+            storageBucket: "agendacomercial-665e0.firebasestorage.app",
+            messagingSenderId: "1031235590861",
+            appId: "1:1031235590861:web:6b746d3b67e6c4d22ea784",
+            measurementId: "G-MPT45E9MES"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        
+        const provider = new GoogleAuthProvider();
+        // Permiso nativo requerido para la inyección de los bloques en Calendar
+        provider.addScope('https://www.googleapis.com/auth/calendar.events');
+
+        let googleAccessToken = null;
+        let unsubscribeListener = null;
+
+        // Validar si el estado de sesión persiste al refrescar la pantalla
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // Para simplificar la persistencia de permisos en el frontend estático,
+                // solicitamos inicio por popup si el Token en memoria se limpia al refrescar
+                if (!googleAccessToken) {
+                    document.getElementById('auth-section').style.display = 'block';
+                    document.getElementById('admin-section').style.display = 'none';
+                }
+            } else {
+                document.getElementById('auth-section').style.display = 'block';
+                document.getElementById('admin-section').style.display = 'none';
+                if (unsubscribeListener) unsubscribeListener();
+            }
+        });
+
+        document.getElementById('btn-login').onclick = () => {
+            signInWithPopup(auth, provider).then((result) => {
+                const credential = GoogleAuthProvider.credentialFromResult(result);
+                googleAccessToken = credential.accessToken;
+                
+                document.getElementById('auth-section').style.display = 'none';
+                document.getElementById('admin-section').style.display = 'block';
+                iniciarMonitoreoRealtime();
+            }).catch(err => {
+                alert("Error de autenticación con Google Cloud: " + err.message);
+            });
+        };
+
+        document.getElementById('btn-logout').onclick = () => {
+            signOut(auth).then(() => location.reload());
+        };
+
+        function iniciarMonitoreoRealtime() {
+            const consola = document.getElementById('log-citas');
+            const q = query(collection(db, "citas"), where("sincronizado", "==", false));
+            
+            // Oidor en tiempo real (onSnapshot) nativo de la V10+ de Firebase
+            unsubscribeListener = onSnapshot(q, (snapshot) => {
+                snapshot.docChanges().forEach((change) => {
+                    if (change.type === "added") {
+                        const cita = change.doc.data();
+                        const docId = change.doc.id;
+                        
+                        consola.innerHTML += `[${new Date().toLocaleTimeString()}] 📥 Detectada cita de ${cita.nombre}. Sincronizando...<br>`;
+                        enviarAGoogleCalendar(cita, docId);
+                    }
+                });
+            });
+        }
+
+        function enviarAGoogleCalendar(cita, docId) {
+            const fechaInicio = new Date(`${cita.fecha}T${cita.hora}:00`);
+            const fechaFin = new Date(fechaInicio.getTime() + (60 * 60 * 1000)); // Bloque de 1 hora de duración
+
+            const evento = {
+                summary: `Consultoría IT: ${cita.nombre}`,
+                description: `Cliente: ${cita.nombre}\nTeléfono: ${cita.telefono}\nServicio: ${cita.servicio}\n\nNotas:\n${cita.notas}`,
+                start: { dateTime: fechaInicio.toISOString(), timeZone: 'UTC' },
+                end: { dateTime: fechaFin.toISOString(), timeZone: 'UTC' }
+            };
+
+            // Petición directa a la API Rest de Google Calendar v3 con el Token del Dueño
+            fetch('https://www.googleapis.com/calendar/v3/calendars/primary/events', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${googleAccessToken}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(evento)
+            })
+            .then(res => res.json())
+            .then(async (data) => {
+                if (data.id) {
+                    // Actualización modular de Firestore modificando el flag a verdadero
+                    const docRef = doc(db, "citas", docId);
+                    await updateDoc(docRef, { sincronizado: true });
+                    document.getElementById('log-citas').innerHTML += `<span style="color: #22c55e;">[ÉXITO] ✅ Cita de ${cita.nombre} insertada con éxito en Google Calendar.</span><br>`;
+                } else {
+                    document.getElementById('log-citas').innerHTML += `<span style="color: #ef4444;">[ERROR GOOGLE] ❌ No se pudo inyectar el evento. Revisa alcances.</span><br>`;
+                }
+            })
+            .catch(err => {
+                document.getElementById('log-citas').innerHTML += `<span style="color: #ef4444;">[ERROR DE RED] ❌ Fallo de comunicación: ${err.message}</span><br>`;
+            });
+        }
+    </script>
+</body>
+</html>
