@@ -3,369 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Juan Carlos Hernández - Consultor de Sistemas</title>
+    <title>Reserva de Sesión - Consultoría IT</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
         :root {
-            --primary-color: #2563eb;    /* Azul Eléctrico Digital */
+            --primary-color: #2563eb;
             --primary-hover: #1d4ed8;    
             --bg-color: #f8fafc;         
             --card-color: #ffffff;
-            --text-color: #0f172a;       /* Slate 900 */
-            --text-muted: #64748b;       /* Slate 500 */
-            --border-color: #e2e8f0;     /* Slate 200 */
-            --success-bg: #f0fff4;       /* Toque verde de disponibilidad */
+            --text-color: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --success-bg: #f0fff4;       
             --success-text: #166534;     
-            --danger-bg: #fef2f2;        
-            --danger-text: #ef4444;
             --radius-lg: 16px;
             --radius-md: 10px;
             --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             background: radial-gradient(120% 120% at 50% 0%, #ffffff 0%, #f1f5f9 100%);
             background-attachment: fixed;
             color: var(--text-color);
             padding: 40px 15px;
             line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
         }
-        
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        
-        /* Encabezado Estilo Dashboard */
-        header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding: 10px 0;
-        }
-
+        .container { max-width: 600px; margin: 0 auto; }
+        header { text-align: center; margin-bottom: 40px; }
         .brand-name {
-            color: var(--text-color);
-            font-size: clamp(2rem, 6vw, 2.8rem);
+            font-size: clamp(2rem, 6vw, 2.5rem);
             font-weight: 800;
-            line-height: 1.1;
             letter-spacing: -1.5px;
-            margin-bottom: 8px;
             background: linear-gradient(135deg, #0f172a 30%, #2563eb 100%);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
-            display: inline-block;
         }
-
-        .brand-subtitle {
-            color: var(--primary-color);
-            font-size: clamp(0.8rem, 2.5vw, 0.95rem);
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            margin-bottom: 16px;
-        }
-
-        .page-title-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            margin-top: 5px;
-        }
-
-        .page-title {
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .demo-badge {
-            background-color: #fff7ed;
-            color: #c2410c;
-            border: 1px solid #ffedd5;
-            padding: 3px 10px;
-            border-radius: 20px;
-            font-size: 0.65rem;
-            font-weight: 700;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            display: inline-block;
-            box-shadow: 0 2px 4px rgba(249, 115, 22, 0.05);
-        }
-
-        /* Tarjetas con Efecto de Elevación */
+        .brand-subtitle { color: var(--primary-color); font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; margin-top: 5px; }
         .section-card {
             background-color: var(--card-color);
             padding: 40px;
             border-radius: var(--radius-lg);
             margin-bottom: 30px;
-            box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.04), 0 1px 3px 0 rgba(15, 23, 42, 0.02);
-            border: 1px solid var(--border-color);
-            transition: var(--transition);
-            animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .section-card:hover {
-            box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.08), 0 1px 3px 0 rgba(15, 23, 42, 0.02);
-            transform: translateY(-2px);
-        }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        h2 {
-            color: var(--text-color);
-            padding-bottom: 16px;
-            margin-bottom: 30px;
-            font-size: 1.15rem;
-            font-weight: 800;
-            border-bottom: 1px solid var(--border-color);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        h3 {
-            font-size: 0.9rem;
-            margin-bottom: 18px;
-            color: var(--text-color);
-            font-weight: 700;
-            border-left: 3.5px solid var(--primary-color);
-            padding-left: 12px;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 700;
-            font-size: 11.5px;
-            text-transform: uppercase;
-            letter-spacing: 0.75px;
-            color: var(--text-muted);
-        }
-        
-        input, select, textarea {
-            width: 100%;
-            padding: 14px 16px;
-            margin-bottom: 24px;
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-md);
-            font-size: 14px;
-            font-family: inherit;
-            background-color: #f8fafc;
-            transition: var(--transition);
-            color: var(--text-color);
-        }
-        
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            background-color: #fff;
-            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
-        }
-        
-        /* Botón de Acción Principal */
-        .btn {
-            color: white;
-            padding: 16px 28px;
-            border: none;
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            font-size: 15px;
-            font-weight: 700;
-            font-family: inherit;
-            transition: var(--transition);
-            display: inline-block;
-            text-align: center;
-            width: 100%;
-            letter-spacing: 0.5px;
-            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
-        }
-
-        .btn-primary { background-color: var(--primary-color); }
-        .btn-primary:hover { background-color: var(--primary-hover); box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35); }
-        .btn:active { transform: scale(0.98); }
-
-        /* Widget de Calendario de Alta Fidelidad */
-        .calendar-container {
-            max-width: 100%;
-            margin: 0 auto 30px auto;
-            border-radius: var(--radius-md);
-            overflow: hidden;
-            background: #fff;
+            box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.04);
             border: 1px solid var(--border-color);
         }
-
-        .calendar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #0f172a;
-            color: #fff;
-            padding: 16px 20px;
-        }
-
-        .calendar-header button {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 32px;
-            height: 32px;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: var(--transition);
-        }
-
-        .calendar-header button:hover { background-color: rgba(255,255,255,0.15); }
-        .calendar-header h4 { font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; }
-
-        .calendar-weekdays {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            text-align: center;
-            font-weight: 800;
-            background: #f8fafc;
-            font-size: 10.5px;
-            text-transform: uppercase;
-            letter-spacing: 0.75px;
-            color: var(--text-muted);
-            padding: 12px 0;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .calendar-days {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            padding: 10px;
-            gap: 6px;
-            background-color: #fff;
-        }
-
-        .calendar-days .day {
-            text-align: center;
-            padding: 12px 0;
-            font-size: 13px;
-            font-weight: 600;
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            transition: var(--transition);
-            background: #fff;
-            color: var(--text-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
+        h2 { padding-bottom: 16px; margin-bottom: 30px; font-size: 1.15rem; font-weight: 800; border-bottom: 1px solid var(--border-color); text-transform: uppercase; }
+        h3 { font-size: 0.9rem; margin-bottom: 18px; border-left: 3.5px solid var(--primary-color); padding-left: 12px; font-weight: 700; }
+        label { display: block; margin-bottom: 8px; font-weight: 700; font-size: 11px; text-transform: uppercase; color: var(--text-muted); }
+        input, select, textarea { width: 100%; padding: 14px 16px; margin-bottom: 24px; border: 1px solid var(--border-color); border-radius: var(--radius-md); font-size: 14px; background-color: #f8fafc; color: var(--text-color); }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary-color); background-color: #fff; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12); }
+        .btn { color: white; padding: 16px 28px; border: none; border-radius: var(--radius-md); cursor: pointer; font-size: 15px; font-weight: 700; width: 100%; text-align: center; background-color: var(--primary-color); box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25); transition: var(--transition); }
+        .btn:hover { background-color: var(--primary-hover); }
+        
+        /* Calendario UI */
+        .calendar-container { border-radius: var(--radius-md); overflow: hidden; background: #fff; border: 1px solid var(--border-color); margin-bottom: 30px; }
+        .calendar-header { display: flex; justify-content: space-between; align-items: center; background-color: #0f172a; color: #fff; padding: 16px 20px; }
+        .calendar-header button { background: none; border: none; color: white; font-size: 16px; cursor: pointer; width: 32px; height: 32px; }
+        .calendar-header h4 { font-size: 13px; font-weight: 800; text-transform: uppercase; }
+        .calendar-weekdays { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; background: #f8fafc; font-size: 10px; font-weight: 800; text-transform: uppercase; padding: 12px 0; border-bottom: 1px solid var(--border-color); color: var(--text-muted); }
+        .calendar-days { display: grid; grid-template-columns: repeat(7, 1fr); padding: 10px; gap: 6px; }
+        .calendar-days .day { text-align: center; padding: 12px 0; font-size: 13px; font-weight: 600; border-radius: var(--radius-md); cursor: pointer; display: flex; align-items: center; justify-content: center; }
         .calendar-days .day:hover:not(.disabled) { background-color: #f1f5f9; color: var(--primary-color); }
-        .calendar-days .day.disabled { color: #cbd5e1; cursor: not-allowed; background-color: #fff; opacity: 0.3; }
-        .calendar-days .day.selected { background-color: var(--primary-color) !important; color: white !important; font-weight: 700; transform: scale(1.03); }
-        .calendar-days .day.today { box-shadow: inset 0 0 0 2px #0f172a; font-weight: 800; }
-
-        /* Slots Horarios Integrados */
-        .slots-container {
-            display: none;
-            margin-top: 30px;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .slots-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .slot-btn {
-            padding: 12px;
-            font-size: 13px;
-            font-weight: 700;
-            border: 1px solid #bbf7d0;
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            text-align: center;
-            transition: var(--transition);
-            background-color: var(--success-bg);
-            color: var(--success-text);
-        }
-
-        .slot-btn:hover { background-color: var(--primary-color); color: white; border-color: var(--primary-color); transform: translateY(-1px); }
-        .slot-btn.selected { background-color: #0f172a; color: white; border-color: #0f172a; transform: scale(1.02); }
-
-        /* Contenedores Dinámicos */
-        .form-registro-cita {
-            display: none;
-            margin-top: 35px;
-            padding-top: 30px;
-            border-top: 1px dashed var(--border-color);
-            animation: fadeIn 0.3s ease;
-        }
-
-        .display-seleccion {
-            background-color: #f8fafc;
-            padding: 14px 18px;
-            border-radius: var(--radius-md);
-            margin-bottom: 28px;
-            font-size: 13.5px;
-            border-left: 4px solid var(--primary-color);
-            color: var(--text-color);
-            border-top: 1px solid var(--border-color);
-            border-right: 1px solid var(--border-color);
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        footer {
-            margin-top: 50px;
-            text-align: center;
-            padding: 24px;
-            font-size: 11px;
-            color: var(--text-muted);
-            border-top: 1px solid var(--border-color);
-        }
+        .calendar-days .day.disabled { color: #cbd5e1; cursor: not-allowed; opacity: 0.3; }
+        .calendar-days .day.selected { background-color: var(--primary-color) !important; color: white !important; font-weight: 700; }
+        .calendar-days .day.today { box-shadow: inset 0 0 0 2px #0f172a; }
         
-        @media screen and (max-width: 480px) {
-            body { padding: 20px 5px; }
-            .section-card { padding: 25px 20px; }
-        }
+        .slots-container { display: none; margin-top: 30px; }
+        .slots-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; margin-top: 15px; }
+        .slot-btn { padding: 12px; font-size: 13px; font-weight: 700; border: 1px solid #bbf7d0; border-radius: var(--radius-md); cursor: pointer; text-align: center; background-color: var(--success-bg); color: var(--success-text); transition: var(--transition); }
+        .slot-btn:hover { background-color: var(--primary-color); color: white; }
+        .slot-btn.selected { background-color: #0f172a; color: white; border-color: #0f172a; }
+        .form-registro-cita { display: none; margin-top: 35px; padding-top: 30px; border-top: 1px dashed var(--border-color); }
+        .display-seleccion { background-color: #f8fafc; padding: 14px 18px; border-radius: var(--radius-md); margin-bottom: 28px; font-size: 13.5px; border: 1px solid var(--border-color); border-left: 4px solid var(--primary-color); }
+        footer { margin-top: 50px; text-align: center; padding: 24px; font-size: 11px; color: var(--text-muted); }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1 class="brand-name">Juan Carlos Hernández</h1>
-            <p class="brand-subtitle">Asesor Informático</p>
-            <div class="page-title-container">
-                <span class="page-title">Agendamiento de Sesión</span>
-                <span class="demo-badge">Modo Demo</span>
-            </div>
+            <h1 class="brand-name">Consultoría de Sistemas</h1>
+            <p class="brand-subtitle">Planificación de Citas</p>
         </header>
 
         <main>
             <div class="section-card">
-                <h2>Planificar Consultoría</h2>
+                <h2>Reserva tu espacio horario</h2>
                 
-                <h3>Paso 1: Selecciona la fecha en la agenda</h3>
+                <h3>Paso 1: Selecciona el día</h3>
                 <div class="calendar-container">
                     <div class="calendar-header">
                         <button id="btn-prev-month">&lt;</button>
@@ -379,72 +107,78 @@
                 </div>
 
                 <div id="section-slots" class="slots-container">
-                    <h3>Paso 2: Elige un bloque horario</h3>
+                    <h3>Paso 2: Elige la hora</h3>
                     <div id="slots-grid" class="slots-grid"></div>
                 </div>
 
                 <div id="section-registro" class="form-registro-cita">
-                    <h3>Paso 3: Datos del proyecto / sistema</h3>
+                    <h3>Paso 3: Completa tus datos</h3>
                     <div id="display-seleccion" class="display-seleccion"></div>
 
                     <form id="citaForm">
                         <input type="hidden" id="fecha" required>
                         <input type="hidden" id="hora" required>
 
-                        <label for="nombre">Nombre Completo o Razón Social:</label>
-                        <input type="text" id="nombre" required placeholder="Ej: Carlos Mendoza / TecnoSoluciones C.A.">
+                        <label for="nombre">Nombre Completo:</label>
+                        <input type="text" id="nombre" required placeholder="Ej: Carlos Mendoza">
                         
-                        <label for="telefono">Teléfono Directo de Contacto:</label>
-                        <input type="tel" id="telefono" required placeholder="Ej: 0412-1234567">
+                        <label for="telefono">Teléfono de Contacto:</label>
+                        <input type="tel" id="telefono" required placeholder="Ej: +58 412-1234567">
                         
-                        <label for="servicio">Área de Consultoría / Análisis Requerido:</label>
+                        <label for="servicio">Requerimiento Técnico:</label>
                         <select id="servicio" required>
-                            <option value="">Seleccione el requerimiento técnico</option>
-                            <option value="Consultoría Tecnológica General">Consultoría Tecnológica General</option>
-                            <option value="Análisis de Requerimientos de Software">Análisis de Requerimientos de Software</option>
-                            <option value="Diseño y Arquitectura de Sistemas">Diseño y Arquitectura de Sistemas</option>
-                            <option value="Auditoría de Sistemas e Infraestructura">Auditoría de Sistemas e Infraestructura</option>
-                            <option value="Modelado y Optimización de Procesos (BPM)">Modelado y Optimización de Procesos (BPM)</option>
-                            <option value="Asesoría en Bases de Datos y Estrategia Cloud">Asesoría en Bases de Datos y Estrategia Cloud</option>
-                            <option value="Evaluación de Viabilidad de Proyectos IT">Evaluación de Viabilidad de Proyectos IT</option>
+                            <option value="">Seleccione un servicio</option>
+                            <option value="Consultoría General">Consultoría General</option>
+                            <option value="Arquitectura de Software">Arquitectura de Software</option>
+                            <option value="Bases de Datos / Servidores">Bases de Datos / Servidores</option>
                         </select>
                         
-                        <label for="notas">Breve descripción del problema o arquitectura a evaluar:</label>
-                        <textarea id="notas" rows="4" placeholder="Describa brevemente el ecosistema actual, lenguaje, base de datos o dolor técnico que desea solventar..."></textarea>
+                        <label for="notas">Notas Adicionales (Opcional):</label>
+                        <textarea id="notas" rows="4" placeholder="Describa brevemente su requerimiento técnico..."></textarea>
                         
-                        <button type="submit" class="btn btn-primary">Confirmar y Solicitar por WhatsApp</button>
+                        <button type="submit" class="btn">Agendar Cita e ir a WhatsApp</button>
                     </form>
                 </div>
             </div>
         </main>
-
-        <footer>
-            <p>&copy; 2026 Juan Carlos Hernández - Consultoría y Arquitectura de Sistemas IT. Entorno Demo sin base de datos activa.</p>
-        </footer>
+        <footer><p>&copy; 2026 Plataforma de Gestión de Agenda Comercial Local.</p></footer>
     </div>
     
-    <script>
-        // --- CONFIGURACIÓN ---
+    <!-- LÓGICA MODULAR DE FIREBASE + INTERFAZ -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // Tu configuración de Firebase Cloud
+        const firebaseConfig = {
+            apiKey: "AIzaSyDgIdkDoxCNNF6l0rBXNcSt_EvxdyD5fQU",
+            authDomain: "agendacomercial-665e0.firebaseapp.com",
+            projectId: "agendacomercial-665e0",
+            storageBucket: "agendacomercial-665e0.firebasestorage.app",
+            messagingSenderId: "1031235590861",
+            appId: "1:1031235590861:web:6b746d3b67e6c4d22ea784",
+            measurementId: "G-MPT45E9MES"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
         const WHATSAPP_DESTINATARIO = "584129294955";
         const HORAS_JORNADA = ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00"];
-        const MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+        const MESES = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 
-        // Estado local temporal
         let fechaActual = new Date();
         let mesDesplegado = fechaActual.getMonth();
         let anioDesplegado = fechaActual.getFullYear();
         let fechaSeleccionadaStr = "";
         let horaSeleccionadaStr = "";
 
-        // --- INICIALIZACIÓN ---
-        document.addEventListener('DOMContentLoaded', () => {
+        window.addEventListener('DOMContentLoaded', () => {
             renderizarCalendario();
-            
-            document.getElementById('btn-prev-month').addEventListener('click', () => cambiarMes(-1));
-            document.getElementById('btn-next-month').addEventListener('click', () => cambiarMes(1));
+            document.getElementById('btn-prev-month').onclick = () => cambiarMes(-1);
+            document.getElementById('btn-next-month').onclick = () => cambiarMes(1);
         });
 
-        // --- LÓGICA DEL CALENDARIO ---
         function renderizarCalendario() {
             const contenedorDias = document.getElementById('calendar-days');
             const tituloMesAnio = document.getElementById('calendar-month-year');
@@ -453,17 +187,13 @@
 
             const primerDiaIndex = new Date(anioDesplegado, mesDesplegado, 1).getDay();
             const totalDiasMes = new Date(anioDesplegado, mesDesplegado + 1, 0).getDate();
-            const hoy = new Date(); 
-            hoy.setHours(0,0,0,0);
+            const hoy = new Date(); hoy.setHours(0,0,0,0);
 
-            for (let i = 0; i < primerDiaIndex; i++) {
-                contenedorDias.appendChild(document.createElement('div'));
-            }
+            for (let i = 0; i < primerDiaIndex; i++) contenedorDias.appendChild(document.createElement('div'));
 
             for (let dia = 1; dia <= totalDiasMes; dia++) {
                 const elementoDia = document.createElement('div');
-                elementoDia.className = 'day'; 
-                elementoDia.textContent = dia;
+                elementoDia.className = 'day'; elementoDia.textContent = dia;
                 
                 const fechaIteracion = new Date(anioDesplegado, mesDesplegado, dia);
                 const mesFormateado = String(mesDesplegado + 1).padStart(2, '0');
@@ -481,10 +211,6 @@
                         elementoDia.classList.add('selected');
                         fechaSeleccionadaStr = fechaStr;
                         document.getElementById('fecha').value = fechaStr;
-                        
-                        horaSeleccionadaStr = ""; 
-                        document.getElementById('hora').value = "";
-                        document.getElementById('section-registro').style.display = 'none';
                         desplegarSlotsHoras();
                     };
                 }
@@ -492,75 +218,66 @@
             }
         }
 
-        function cambiarMes(direccion) {
-            mesDesplegado += direccion;
+        function cambiarMes(dir) {
+            mesDesplegado += dir;
             if (mesDesplegado < 0) { mesDesplegado = 11; anioDesplegado--; }
             else if (mesDesplegado > 11) { mesDesplegado = 0; anioDesplegado++; }
             renderizarCalendario();
         }
 
-        // --- DESPLIEGUE DE HORAS ---
         function desplegarSlotsHoras() {
-            const sectionSlots = document.getElementById('section-slots');
-            const gridSlots = document.getElementById('slots-grid');
-            gridSlots.innerHTML = ''; 
-            sectionSlots.style.display = 'block';
+            const grid = document.getElementById('slots-grid');
+            grid.innerHTML = '';
+            document.getElementById('section-slots').style.display = 'block';
+            document.getElementById('section-registro').style.display = 'none';
 
             HORAS_JORNADA.forEach(hora => {
-                const btnHora = document.createElement('div');
-                btnHora.className = 'slot-btn';
-                btnHora.textContent = `${hora}`;
-                if (hora === horaSeleccionadaStr) btnHora.classList.add('selected');
-                
-                btnHora.onclick = () => {
+                const btn = document.createElement('div');
+                btn.className = 'slot-btn'; btn.textContent = hora;
+                btn.onclick = () => {
                     document.querySelectorAll('.slot-btn').forEach(b => b.classList.remove('selected'));
-                    btnHora.classList.add('selected');
-                    horaSeleccionadaStr = hora; 
+                    btn.classList.add('selected');
+                    horaSeleccionadaStr = hora;
                     document.getElementById('hora').value = hora;
-                    
-                    document.getElementById('display-seleccion').innerHTML = `🖥️ <b>Bloque reservado:</b> Día ${formatearFecha(fechaSeleccionadaStr)} a las <b>${hora} hrs</b>.`;
+                    document.getElementById('display-seleccion').innerHTML = `📅 <b>Turno seleccionado:</b> ${fechaSeleccionadaStr.split('-').reverse().join('/')} a las <b>${hora} hrs</b>.`;
                     document.getElementById('section-registro').style.display = 'block';
-                    document.getElementById('section-registro').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                 };
-                gridSlots.appendChild(btnHora);
+                grid.appendChild(btn);
             });
         }
 
-        function formatearFecha(fechaStr) {
-            const partes = fechaStr.split('-');
-            return partes.length === 3 ? `${partes[2]}/${partes[1]}/${partes[0]}` : fechaStr;
-        }
-
-        // --- ENVÍO DE DATOS A WHATSAPP ---
-        document.getElementById('citaForm').addEventListener('submit', function(e) {
+        document.getElementById('citaForm').onsubmit = async (e) => {
             e.preventDefault();
             
-            const fecha = formatearFecha(document.getElementById('fecha').value);
-            const hora = document.getElementById('hora').value;
-            const nombre = document.getElementById('nombre').value.trim();
-            const telefono = document.getElementById('telefono').value.trim();
-            const servicio = document.getElementById('servicio').value;
-            const notas = document.getElementById('notas').value.trim();
+            const dataCita = {
+                nombre: document.getElementById('nombre').value.trim(),
+                telefono: document.getElementById('telefono').value.trim(),
+                servicio: document.getElementById('servicio').value,
+                fecha: document.getElementById('fecha').value,
+                hora: document.getElementById('hora').value,
+                notas: document.getElementById('notas').value.trim(),
+                sincronizado: false,
+                creado_el: serverTimestamp()
+            };
 
-            let mensaje = `💼 *SOLICITUD DE ASESORÍA / CONSULTA* 💼\n`;
-            mensaje += `_(Enviado desde Plataforma Demo)_\n\n`;
-            mensaje += `👤 *Cliente/Empresa:* ${nombre}\n`;
-            mensaje += `📞 *Teléfono:* ${telefono}\n`;
-            mensaje += `⚙️ *Requerimiento:* ${servicio}\n`;
-            mensaje += `📅 *Fecha sugerida:* ${fecha}\n`;
-            mensaje += `⏰ *Hora sugerida:* ${hora} hrs\n`;
-            
-            if (notas) {
-                mensaje += `\n📝 *Caso de evaluación / Notas:*\n"${notas}"\n`;
+            try {
+                // Guarda de forma asíncrona en Cloud Firestore
+                await addDoc(collection(db, "citas"), dataCita);
+                
+                // Armado del mensaje de texto estructurado para WhatsApp
+                let txt = `💼 *NUEVA CITA REGISTRADA*\n\n`;
+                txt += `👤 *Cliente:* ${dataCita.nombre}\n`;
+                txt += `📞 *Teléfono:* ${dataCita.telefono}\n`;
+                txt += `⚙️ *Servicio:* ${dataCita.servicio}\n`;
+                txt += `📅 *Fecha:* ${dataCita.fecha.split('-').reverse().join('/')}\n`;
+                txt += `⏰ *Hora:* ${dataCita.hora} hrs\n`;
+                if(dataCita.notas) txt += `\n📝 *Notas:* "${dataCita.notas}"\n`;
+
+                window.open(`https://wa.me/${WHATSAPP_DESTINATARIO}?text=${encodeURIComponent(txt)}`, '_blank');
+            } catch (err) {
+                alert("Error al procesar la solicitud: " + err.message);
             }
-            
-            mensaje += `\n_Por favor Juan Carlos, indícame tu disponibilidad para validar este bloque horario e iniciar el análisis de requerimientos._`;
-
-            const mensajeCodificado = encodeURIComponent(mensaje);
-            const urlWhatsApp = `https://wa.me/${WHATSAPP_DESTINATARIO}?text=${mensajeCodificado}`;
-
-            window.open(urlWhatsApp, '_blank');
-        });
+        };
     </script>
 </body>
 </html>
